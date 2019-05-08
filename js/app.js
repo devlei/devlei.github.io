@@ -1,43 +1,41 @@
-document.addEventListener('DOMContentLoaded', function () {
-  // Get all "navbar-burger" elements
-  var $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
-  // Check if there are any nav burgers
-  if ($navbarBurgers.length > 0) {
-    // Add a click event on each of them
-    $navbarBurgers.forEach(function ($el) {
-      $el.addEventListener('click', () => {
-        // Get the target from the "data-target" attribute
-        var target = $el.dataset.target;
-        var $target = document.getElementById(target);
-        // Toggle the class on both the "navbar-burger" and the "navbar-menu"
-        $el.classList.toggle('is-active');
-        $target.classList.toggle('is-active');
+var appDaily = {
+  baiduSearch: function(words) {
+    var key = 'site:' + window.location.host + '%20' + words.replace(/\s/g, '%20');
+    var url = 'https://www.baidu.com/baidu?tn=baidu&ie=utf-8&word=';
 
-      });
+    window.open(url + key, '_blank');
+  },
+  googleSearch: function(words) {
+    var key = 'site:' + window.location.host + '%20' + words.replace(/\s/g, '%20');
+    var url = 'https://www.google.com/search?q=';
+
+    window.open(url + key, '_blank');
+  },
+  submitSearch: function(search_engines) {
+    var $ipt = document.getElementById('homeSearchInput');
+
+    if (search_engines === 'baidu') {
+      this.baiduSearch($ipt.value.trim());
+    } else {
+      this.googleSearch($ipt.value.trim());
+    }
+
+    return false;
+  },
+  bindToggleButton: function() {
+    var btn = document.querySelector('.menu-toggle');
+    var nav = document.querySelector('.navbar');
+
+    btn.addEventListener('click', function() {
+      var c = nav.getAttribute('class') || '';
+
+      if (c.indexOf('show-force') !== -1) {
+        nav.setAttribute('class', c.replace(/show-force/, '').trim());
+      } else {
+        nav.setAttribute('class', (c + ' show-force').trim());
+      }
     });
   }
-   var sr  = document.getElementById('search');
-  (window.screen.width < 800) ? sr.style.width= "" :  sr.style.width= "300px";
+};
 
-});
-
-
-var value = document.getElementById("cur").value;
-if (value !== ""){
-    var u  = document.getElementById('share');
-    u.onmouseover = function() {
-        document.getElementById("shared").style.display = 'block';
-    }
-    u.onmouseout = function() {
-        document.getElementById("shared").style.display = 'none';
-    }
-    var al = document.getElementById('shared').getElementsByTagName('a');
-    for (var i=0; i<al.length; i++){
-        al[i].setAttribute('target', '_blank');
-    }
-    document.getElementById('fb').setAttribute("href", "https://www.facebook.com/sharer.php?u="+value);
-    document.getElementById('tw').setAttribute("href", "https://twitter.com/intent/tweet?url="+value);
-    document.getElementById('gp').setAttribute("href", "https://plus.google.com/share?url="+value);
-    document.getElementById('pt').setAttribute("href", "http://pinterest.com/pin/create/button/?url="+value);
-}
-
+appDaily.bindToggleButton();
